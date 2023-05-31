@@ -10,7 +10,9 @@ import (
 )
 
 func WsEndpoint(c *gin.Context) {
-	ws, err := websocket.Accept(c.Writer, c.Request, nil)
+	ws, err := websocket.Accept(c.Writer, c.Request, &websocket.AcceptOptions{
+		OriginPatterns: []string{"*"},
+	})
 	if err != nil {
 		log.Println(err)
 	}
@@ -19,12 +21,12 @@ func WsEndpoint(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), time.Second*10)
 	defer cancel()
 
-	messageType, message, err := ws.Read(ctx)
+	_, message, err := ws.Read(ctx)
 	if err != nil {
 		log.Println(err)
 	}
 
-	log.Printf("received: %s: %s", messageType.String(), string(message))
+	log.Printf("received: %s", string(message))
 
-	ws.Close(websocket.StatusNormalClosure, "")
+	ws.Close(websocket.StatusNormalClosure, "WebSocket executed succesfully")
 }
