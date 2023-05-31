@@ -7,7 +7,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"nhooyr.io/websocket"
-	"nhooyr.io/websocket/wsjson"
 )
 
 func WsEndpoint(c *gin.Context) {
@@ -20,13 +19,12 @@ func WsEndpoint(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), time.Second*10)
 	defer cancel()
 
-	var v interface{}
-	err = wsjson.Read(ctx, ws, &v)
+	messageType, message, err := ws.Read(ctx)
 	if err != nil {
 		log.Println(err)
 	}
 
-	log.Printf("received: %v", v)
+	log.Printf("received: %s: %s", messageType.String(), string(message))
 
 	ws.Close(websocket.StatusNormalClosure, "")
 }
