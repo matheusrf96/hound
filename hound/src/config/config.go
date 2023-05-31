@@ -1,6 +1,7 @@
 package config
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"path/filepath"
@@ -12,8 +13,9 @@ import (
 )
 
 var (
-	Port         = 0
-	AbsolutePath = ""
+	Port                     = 0
+	AbsolutePath             = ""
+	RabbitMQConnectionString = ""
 )
 
 func Load() {
@@ -34,8 +36,16 @@ func Load() {
 
 	Port, err = strconv.Atoi(os.Getenv("API_PORT"))
 	if err != nil {
-		Port = 8000
+		Port = 5000
 	}
+
+	RabbitMQConnectionString = fmt.Sprintf(
+		"amqp://%s:%s@%s:%s/",
+		os.Getenv("RABBITMQ_USER"),
+		os.Getenv("RABBITMQ_PASSWORD"),
+		os.Getenv("RABBITMQ_HOST"),
+		os.Getenv("RABBITMQ_PORT"),
+	)
 
 	os.Setenv("TZ", "America/Sao_Paulo")
 }

@@ -10,7 +10,7 @@ function getData() {
 
 function sendMessage() {
     const data = getData()
-    const socket = new WebSocket(`ws://localhost:8000/ws`)
+    const socket = new WebSocket(`ws://localhost:5000/ws`)
 
     socket.onopen = () => {
         socket.send(JSON.stringify(data))

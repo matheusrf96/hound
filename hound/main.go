@@ -23,5 +23,6 @@ func main() {
 	setupRoutes(r)
 
 	fmt.Println("Hound is running... chasing the rabbit")
+	fmt.Printf(":%d\n", config.Port)
 	r.Run(fmt.Sprintf(":%d", config.Port))
 }
