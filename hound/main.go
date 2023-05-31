@@ -18,8 +18,6 @@ func main() {
 	config.Load()
 
 	r := gin.New()
-
-	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
 
 	setupRoutes(r)

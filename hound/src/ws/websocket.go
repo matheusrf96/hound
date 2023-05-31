@@ -2,7 +2,9 @@ package ws
 
 import (
 	"context"
+	"hound/src/controllers"
 	"log"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -26,7 +28,17 @@ func WsEndpoint(c *gin.Context) {
 		log.Println(err)
 	}
 
-	log.Printf("received: %s", string(message))
+	originIp := c.Request.Header.Get("X-Forwarded-For")
+	if originIp == "" {
+		originIp = strings.Split(c.Request.RemoteAddr, ":")[0]
+	}
+
+	ch := controllers.HandleData(message, originIp)
+	cData := <-ch
+
+	if cData != "" {
+		log.Println(cData)
+	}
 
 	ws.Close(websocket.StatusNormalClosure, "WebSocket executed succesfully")
 }
