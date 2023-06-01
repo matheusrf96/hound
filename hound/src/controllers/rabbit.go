@@ -61,5 +61,5 @@ func handleData(data []byte, originIp string) string {
 		return fmt.Sprintf("%s: %s", "Failed to publish a message", err)
 	}
 
-	return fmt.Sprintf(" [x] Sent %s\n", data)
+	return fmt.Sprintf("[x] Sent %s", data)
 }
