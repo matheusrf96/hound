@@ -32,14 +32,7 @@ func handleData(data []byte, originIp string) string {
 	}
 	defer ch.Close()
 
-	q, err := ch.QueueDeclare(
-		"hound",
-		true,
-		false,
-		false,
-		false,
-		nil,
-	)
+	q, err := ch.QueueDeclare("hound", true, false, false, false, nil)
 	if err != nil {
 		return fmt.Sprintf("%s: %s", "Failed to declare a queue", err)
 	}
