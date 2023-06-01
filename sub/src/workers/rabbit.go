@@ -9,13 +9,13 @@ type fn func()
 
 func New(routine fn, interval int) {
 	ticker := time.NewTicker(time.Duration(interval) * time.Second)
-	quit := make(chan struct{})
+	c := make(chan struct{})
 	func() {
 		for {
 			select {
 			case <-ticker.C:
 				routine()
-			case <-quit:
+			case <-c:
 				ticker.Stop()
 				return
 			}
