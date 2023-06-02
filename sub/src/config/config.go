@@ -16,6 +16,7 @@ var (
 	Port                     = 0
 	AbsolutePath             = ""
 	RabbitMQConnectionString = ""
+	DatabaseConnectionString = ""
 )
 
 func Load() {
@@ -45,6 +46,15 @@ func Load() {
 		os.Getenv("RABBITMQ_PASSWORD"),
 		os.Getenv("RABBITMQ_HOST"),
 		os.Getenv("RABBITMQ_PORT"),
+	)
+
+	DatabaseConnectionString = fmt.Sprintf(
+		"dbname=%s user=%s password=%s host=%s port=%s sslmode=disable",
+		os.Getenv("HOUND_DB_DATABASE"),
+		os.Getenv("HOUND_DB_USER"),
+		os.Getenv("HOUND_DB_PASSWORD"),
+		os.Getenv("HOUND_DB_HOST"),
+		os.Getenv("HOUND_DB_PORT"),
 	)
 
 	os.Setenv("TZ", "America/Sao_Paulo")

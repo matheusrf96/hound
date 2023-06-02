@@ -21,7 +21,6 @@ func main() {
 
 	setupRoutes(r)
 
-	workers.New(workers.Counter, 3)
 	workers.New(workers.GetRabbitMQData, 5)
 
 	fmt.Println("Hound is running... chasing the rabbit")

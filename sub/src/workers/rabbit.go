@@ -1,7 +1,6 @@
 package workers
 
 import (
-	"fmt"
 	"log"
 	"sub/src/config"
 	"time"
@@ -27,14 +26,6 @@ func New(routine fn, interval int) {
 	}()
 }
 
-func Counter() {
-	for i := 1; i <= 5; i++ {
-		fmt.Println(i)
-	}
-
-	fmt.Println()
-}
-
 func GetRabbitMQData() {
 	conn, err := amqp.Dial(config.RabbitMQConnectionString)
 	if err != nil {
@@ -53,7 +44,7 @@ func GetRabbitMQData() {
 		log.Printf("%s: %s", "Failed to declare a queue", err)
 	}
 
-	msgs, err := ch.Consume(q.Name, "", false, false, false, false, nil)
+	msgs, err := ch.Consume(q.Name, "", true, false, false, false, nil)
 	if err != nil {
 		log.Printf("%s: %s", "Failed to register a consumer", err)
 	}
