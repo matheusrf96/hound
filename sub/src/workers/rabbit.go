@@ -3,6 +3,7 @@ package workers
 import (
 	"log"
 	"sub/src/config"
+	"sub/src/controllers"
 	"time"
 
 	amqp "github.com/rabbitmq/amqp091-go"
@@ -10,6 +11,7 @@ import (
 
 type fn func()
 
+// RabbitMQ routine doesn't need a ticker to work, but other routines may need it.
 func New(routine fn, interval int) {
 	ticker := time.NewTicker(time.Duration(interval) * time.Second)
 	c := make(chan struct{})
@@ -51,5 +53,6 @@ func GetRabbitMQData() {
 
 	for d := range msgs {
 		log.Printf("Received a message: %s", d.Body)
+		controllers.HandlePerson(d.Body)
 	}
 }
