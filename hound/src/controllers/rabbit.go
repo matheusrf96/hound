@@ -32,9 +32,19 @@ func handleData(data []byte, originIp string) string {
 	}
 	defer ch.Close()
 
+	err = ch.ExchangeDeclare("hound-direct-exchange", "direct", true, false, false, false, nil)
+	if err != nil {
+		return fmt.Sprintf("%s: %s", "Failed to declare a exchange", err)
+	}
+
 	q, err := ch.QueueDeclare("hound", true, false, false, false, nil)
 	if err != nil {
 		return fmt.Sprintf("%s: %s", "Failed to declare a queue", err)
+	}
+
+	err = ch.QueueBind(q.Name, q.Name, "hound-direct-exchange", false, nil)
+	if err != nil {
+		return fmt.Sprintf("%s: %s", "Failed to bind a queue", err)
 	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
@@ -42,7 +52,7 @@ func handleData(data []byte, originIp string) string {
 
 	err = ch.PublishWithContext(
 		ctx,
-		"",
+		"hound-direct-exchange",
 		q.Name,
 		false,
 		false,
